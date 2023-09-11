@@ -1,63 +1,76 @@
-import React from 'react'
+import React, { useContext } from 'react';
+import { ThemeContext } from '../App';
+import {
+  Menu as MenuIcon,
+  Search,
+  Tune,
+  HelpOutlineOutlined,
+  SettingsOutlined,
+  AppsOutlined,
+  AccountCircleOutlined,
+} from '@mui/icons-material';
+import { AppBar, Switch, Toolbar, styled, InputBase, Box } from '@mui/material';
+import { gmailLogo } from '../constants/constant';
 
-import {Menu as MenuIcon ,Search,Tune,HelpOutlineOutlined,SettingsOutlined,AppsOutlined,AccountCircleOutlined} from "@mui/icons-material"
-import {AppBar, Toolbar,styled,InputBase, Box} from "@mui/material"
-import { gmailLogo } from '../constants/constant'
-const StyledAppBar =styled(AppBar)({
-    background:"#F5F5F5",
-    boxShadow: "none"
-})
+const StyledAppBar = styled(AppBar)(({ theme }) => ({
+  background: theme === 'dark' ? 'black' : '#F5F5F5',
+  boxShadow: 'none',
+  color: theme === 'dark' ? 'white' : 'black', // Text color for dark mode
+}));
 
-const SearchWrapper = styled(Box)({
-    background:"#EAF1FB",
-    marginLeft:80, 
-    borderRadius:8,
-    minWidth:690,
-    maxWidth:720, height:48,
-    display:"flex",
-    alignItems:"center",
-    justifyContent:"space-between",
-    padding:'0 20px',
-    '&> div':{
-        width:'100%',
-        padding:"o 5px"
-    }
-});
+const SearchWrapper = styled(Box)(({ theme }) => ({
+  background: theme === 'dark' ? '#333' : '#EAF1FB',
+  marginLeft: 80,
+  borderRadius: 8,
+  minWidth: 690,
+  maxWidth: 720,
+  height: 48,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  padding: '0 20px',
+  '&> div': {
+    width: '100%',
+    padding: '0 5px',
+  },
+}));
 
-const  OptionsWrapper = styled(Box)({
-    width:'100%',
-    display:'flex',
-    justifyContent:"end",
-    '&> svg':{
-        marginLeft:20
-    }
+const Header = ({ toggleDrawer }) => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
 
-})
+  const handleToggleTheme = () => {
+    toggleTheme();
+  };
 
-
-
-
-
-const Header = ({toggleDrawer}) => {
   return (
-   <StyledAppBar position = "static">
+    <StyledAppBar position="static" theme={theme}>
       <Toolbar>
-     <MenuIcon color ="action" onClick ={toggleDrawer}/>
-     <img src={gmailLogo} alt = "logo" style = {{width:110,marginLeft:15}}/>
-     <SearchWrapper><Search color ="action"/>
-     <InputBase
-     placeholder='Search Mail'/>
-     <Tune color = "action"/></SearchWrapper>
-     <OptionsWrapper>
-        <HelpOutlineOutlined color ="action"/>
-        <SettingsOutlined color = "action"/>
-        <AppsOutlined color = "action"/>
-        <AccountCircleOutlined color = "action"/>
-     </OptionsWrapper>
+        <MenuIcon color="action" onClick={toggleDrawer} />
+        <img src={gmailLogo} alt="logo" style={{ width: 110, marginLeft: 15 }} />
+        <SearchWrapper theme={theme}>
+          <Search color="action" />
+          <InputBase placeholder="Search Mail" />
+          <Tune color="action" />
+        </SearchWrapper>
+        <Switch
+          checked={theme === 'dark'}
+          onChange={handleToggleTheme}
+          color="default"
+        />
+        <Box
+          style={{ color: 'white' }}
+          display="flex"
+          justifyContent="end"
+          alignItems="center"
+        >
+          <HelpOutlineOutlined />
+          <SettingsOutlined />
+          <AppsOutlined />
+          <AccountCircleOutlined />
+        </Box>
       </Toolbar>
-   </StyledAppBar>
-   
-  )
-}
+    </StyledAppBar>
+  );
+};
 
-export default Header
+export default Header;
