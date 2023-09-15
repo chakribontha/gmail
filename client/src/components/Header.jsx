@@ -35,6 +35,7 @@ const SearchWrapper = styled(Box)(({ theme }) => ({
   },
 }));
 
+
 const Header = ({ toggleDrawer }) => {
   const { theme, toggleTheme } = useContext(ThemeContext);
 

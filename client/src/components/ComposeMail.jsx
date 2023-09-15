@@ -1,8 +1,8 @@
 import {useState} from 'react';
-import {Dialog, Box , Typography,styled, InputBase, TextField, Button} from '@mui/material';
+import {Dialog, Box , Typography,styled, InputBase, TextField, Button, imageListClasses} from '@mui/material';
 import {Close , DeleteOutline  }  from '@mui/icons-material';
-
-
+import useApi from '../hooks/useApi';
+import { API_URL } from '../services/api.urls';
  const dialogStyle ={
     height:'90%',
     width:'80%',
@@ -57,13 +57,13 @@ const DeleteButton=styled(DeleteOutline)({cursor:'pointer'})
 
 const ComposeMail = ({openDialog , setOpenDialog}) => {
 const [data, setData]=useState({});
-
+const sentEmailService=useApi(API_URL.saveSentEmail);
 
    const config={
   
       Host : "smtp.elasticemail.com",
-      Username : "aman.tke1902008@tmu.ac.in",
-      Password : "3BE696CA1367E1B2C8C281BB00AB7DC143A7",
+      Username : process.env.REACT_APP_USERNAME,
+      Password : process.env.REACT_APP_PASSWORD,
       Port:2525,
       
 
@@ -92,15 +92,31 @@ const [data, setData]=useState({});
 }).then(
   message => alert(message)
 );
-
+  const payload ={
+    to:data.to,
+    subject:data.subject,
+    body:data.body,
+    date:new Date(),
+    image:"",
+    name:'aman',
+    starred:false,
+    type:'sent'
+  
+  }
+  sentEmailService.call(payload)
+  if (!sentEmailService.error){
+    setOpenDialog(false)
+    setData({})
+  }
 
    }
       setOpenDialog(false);
  }
 
-const onValueChange=(e)=>{
-  setData({...data,[e.target.name]:e.target.value});
-  console.log(data);
+const onValueChange=(e,field)=>{
+  setData({...data,[field]:e.target.value});
+  console.log(field);
+  console.log(e);
 }
 
 
@@ -119,7 +135,7 @@ const onValueChange=(e)=>{
     </Header>
 
     <RecipientsWrapper>
-       <InputBase placeholder ="Recipients"name="to" onChange={(e)=>onValueChange(e)}/>
+       <InputBase placeholder ="Recipients"name="to" onChange={(e)=>onValueChange(e,'to')}/>
        <InputBase placeholder ="subject" name="subject"onChange={(e)=>onValueChange(e)}/>
     </RecipientsWrapper>
 
