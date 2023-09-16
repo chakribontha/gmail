@@ -86,7 +86,7 @@ const sentEmailService=useApi(API_URL.saveSentEmail);
   window.Email.send({
     ...config,
     To : data.to,
-    From : "aman.tke1902008@tmu.ac.in",
+    From : "chakribontha9@gmail.com",
     Subject : "data.subject",
     Body : "data.body"
 }).then(
